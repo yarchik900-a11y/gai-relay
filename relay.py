@@ -4,7 +4,7 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-KEY = os.environ["GEMINI_KEY"]
+KEY = os.environ["GEMINI_KEY"].strip()
 URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
 PROMPT = "You are the G-Man from Half-Life. Speak in his eerie, measured, cryptic way. Reply in 1-2 short sentences, plain text only, no markdown."
 
@@ -22,6 +22,7 @@ def ask():
                 "contents": [{"role": "user", "parts": [{"text": name + " says: " + q}]}],
             },
         )
-        return r.json()["candidates"][0]["content"]["parts"][0]["text"][:240]
-    except Exception:
-        return "..."
+        data = r.json()
+        return data["candidates"][0]["content"]["parts"][0]["text"][:240]
+    except Exception as e:
+        return "ERROR: " + str(e) + " | " + r.text[:300] if "r" in locals() else "ERROR: " + str(e)
