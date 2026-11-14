@@ -16,7 +16,7 @@ def ask():
         r = requests.post(
             URL,
             headers={"x-goog-api-key": KEY},
-            timeout=20,
+            timeout=50,
             json={
                 "system_instruction": {"parts": [{"text": PROMPT}]},
                 "contents": [{"role": "user", "parts": [{"text": name + " says: " + q}]}],
