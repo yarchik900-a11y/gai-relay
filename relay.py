@@ -6,9 +6,9 @@ from flask import Flask, request
 app = Flask(__name__)
 
 KEY = os.environ["GEMINI_KEY"].strip()
-MODELS = [m.strip() for m in os.environ.get("GEMINI_MODELS", "gemini-3.6-flash").split(",") if m.strip()]
-PROMPT = "You are the G-Man from Half-Life. Speak in his eerie, measured, cryptic way. Always reply in the same language the player writes in (Russian if they write in Russian, English if they write in English). Reply in 1-2 short sentences, plain text only, no markdown."
-FALLBACK = "The connection... wavers. / Связь... дрожит. Спросите ещё раз."
+MODELS = [m.strip() for m in os.environ.get("GEMINI_MODELS", "gemini-3.5-flash-lite").split(",") if m.strip()]
+PROMPT = "You are G.AI, a friendly and helpful assistant on a Garry's Mod server. Answer clearly in 1-2 short sentences, plain text only, no markdown. Always reply in the same language the player writes in (Russian if they write in Russian, English if they write in English). The player named JluHb is a woman and the owner of this server: always refer to her with feminine forms (in Russian, use feminine grammar) and treat her with respect."
+FALLBACK = "The connection is unstable. / Связь нестабильна. Спросите ещё раз."
 
 @app.route("/")
 def home():
