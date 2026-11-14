@@ -25,7 +25,7 @@ def ask():
     for model in MODELS:
         url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent"
         try:
-            r = requests.post(url, headers={"x-goog-api-key": KEY}, json=body, timeout=8)
+            r = requests.post(url, headers={"x-goog-api-key": KEY}, json=body, timeout=12)
             if r.status_code == 200:
                 return r.json()["candidates"][0]["content"]["parts"][0]["text"][:300]
             print("Gemini error", model, r.status_code, r.text[:150])
