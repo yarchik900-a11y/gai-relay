@@ -5,7 +5,7 @@ from flask import Flask, request
 app = Flask(__name__)
 
 KEY = os.environ["GEMINI_KEY"].strip()
-URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent"
+URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent"
 PROMPT = "You are the G-Man from Half-Life. Speak in his eerie, measured, cryptic way. Reply in 1-2 short sentences, plain text only, no markdown."
 
 @app.route("/ask")
