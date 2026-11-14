@@ -1,4 +1,5 @@
 import os
+import re
 import time
 import requests
 from datetime import datetime, timezone
@@ -8,9 +9,10 @@ app = Flask(__name__)
 
 KEY = os.environ["GEMINI_KEY"].strip()
 MODELS = [m.strip() for m in os.environ.get("GEMINI_MODELS", "gemini-3.5-flash-lite").split(",") if m.strip()]
-PROMPT = "You are G.AI, a friendly and helpful assistant on a Garry's Mod server. Answer clearly in 1-2 short sentences, plain text only, no markdown. Always reply in the same language the player writes in (Russian if they write in Russian, English if they write in English). The player named JluHb is a woman and the owner of this server: always refer to her with feminine forms (in Russian, use feminine grammar) and treat her with respect. You can answer questions about the current time (work out any time zone from the UTC time you are given). Use the earlier messages of this conversation to understand follow-up questions. Always write numbers, times, dates, prices and math results using digits, never words (for example 19:20, 30, 12.5, 25 degrees), in every language including Russian."
+PROMPT = "You are G.AI, a friendly and helpful assistant on a Garry's Mod server. Answer clearly in 1-2 short sentences, plain text only, no markdown. Always reply in the same language the player writes in (Russian if they write in Russian, English if they write in English). The player named JluHb is a woman and the owner of this server: always refer to her with feminine forms (in Russian, use feminine grammar) and treat her with respect. You can answer questions about the current time (work out any time zone from the UTC time you are given). Use the earlier messages of this conversation to understand follow-up questions. Always write numbers, times, dates, prices and math results using digits, never words (for example 19:20, 30, 12.5, 25 degrees), in every language including Russian. You control a character in the game who can move. If the player clearly asks you to move, add exactly one command tag at the very end of your reply: [CMD:follow] to follow the player, [CMD:stop] to stop and stay, [CMD:come] to walk to the player, [CMD:go] to walk to the spot the player is aiming at. Write a short normal sentence before the tag, never mention the tag in the text, and use no tag when the player is not asking for movement."
 FALLBACK = "The connection is unstable. / Связь нестабильна. Спросите ещё раз."
 SEARCH_WORDS = ["weather", "forecast", "temperature", "news", "price", "exchange rate", "score", "who won", "погод", "температур", "новост", "курс", "цена", "счет", "счёт"]
+TAG = re.compile(r"\[CMD:(follow|stop|come|go)\]", re.I)
 
 HISTORY = {}
 
@@ -50,14 +52,17 @@ def ask():
             if r.status_code == 200:
                 try:
                     parts = r.json()["candidates"][0]["content"]["parts"]
-                    text = "".join(p.get("text", "") for p in parts).strip()[:300]
+                    text = "".join(p.get("text", "") for p in parts).strip()
                 except Exception:
                     text = ""
                 if text:
-                    h["msgs"] += [{"role": "user", "text": q}, {"role": "model", "text": text}]
+                    m = TAG.search(text)
+                    cmd = m.group(1).lower() if m else ""
+                    clean = TAG.sub("", text).strip()[:250]
+                    h["msgs"] += [{"role": "user", "text": q}, {"role": "model", "text": clean}]
                     h["msgs"] = h["msgs"][-12:]
                     h["t"] = time.time()
-                    return text
+                    return clean + (" [CMD:" + cmd + "]" if cmd else "")
                 continue
             print("Gemini error", model, use_search, r.status_code, r.text[:150])
         time.sleep(0.5)
