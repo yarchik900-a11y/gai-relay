@@ -70,6 +70,7 @@ def ask():
     name = request.args.get("name", "someone")[:40]
     q = request.args.get("q", "")[:300]
     known = [p.strip().lower() for p in request.args.get("places", "").split(",") if p.strip()][:20]
+    gmap = request.args.get("map", "")[:60]
     h = get_hist(name)
     n = name.strip().lower()
     if n == "jluhb":
@@ -80,6 +81,8 @@ def ask():
         role = "a regular player, NOT the server owner"
     now = datetime.now(timezone.utc).strftime("%A, %Y-%m-%d %H:%M UTC")
     system = PROMPT + " Current date and time: " + now + "."
+    if gmap:
+        system += " The server is currently playing on the map: " + gmap + "."
     if known:
         system += " Known places the character can walk to: " + ", ".join(known) + ". To walk to one of them, add the tag [CMD:goto:NAME] at the end, using exactly one of these names (translate the player's wording to the matching name). If the player asks to go to a place that is not in this list, say you do not know that place and use no tag."
     else:
