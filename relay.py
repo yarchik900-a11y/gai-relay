@@ -23,6 +23,7 @@ PROPS = {
     "greenbook": "green book", "radio": "radio", "tv": "TV",
     "monitor": "monitor", "harddrive": "PC hard drive", "huladoll": "hula doll",
     "jar": "jar", "cactus": "cactus", "sawblade": "sawblade", "cone": "traffic cone",
+    "melon": "melon (a yellow melon, not a watermelon; Russian: дыня, дынька)",
 }
 PROP_LIST = ", ".join(k + " = " + v for k, v in PROPS.items())
 
