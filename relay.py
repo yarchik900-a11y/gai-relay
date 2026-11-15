@@ -50,7 +50,8 @@ PROMPT = " ".join([
 ])
 
 FALLBACK = "The connection is unstable. / Связь нестабильна. Спросите ещё раз."
-SEARCH_WORDS = ["weather", "forecast", "temperature", "news", "price", "exchange rate", "score", "who won", "погод", "температур", "новост", "курс", "цена", "счет", "счёт"] WIKI_WORDS = ["wiki", "wikipedia", "who is", "who was", "what is", "what are", "tell me about", "вики", "википед", "кто такой", "кто такая", "что такое", "расскажи про", "расскажи о", "найди"]
+SEARCH_WORDS = ["weather", "forecast", "temperature", "news", "price", "exchange rate", "score", "who won", "погод", "температур", "новост", "курс", "цена", "счет", "счёт"]
+WIKI_WORDS = ["wiki", "wikipedia", "who is", "who was", "what is", "what are", "tell me about", "вики", "википед", "кто такой", "кто такая", "что такое", "расскажи про", "расскажи о", "найди"]
 TAG = re.compile(r"\[CMD:([a-z0-9]+(?::[^\]\s]{1,30})?)\]", re.I)
 
 HISTORY = {}
